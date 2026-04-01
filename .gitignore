@@ -1,0 +1,25 @@
+# Experiment outputs
+experiments/
+
+# Python build artifacts
+*.egg-info/
+__pycache__/
+*.pyc
+*.pyo
+build/
+dist/
+
+# IDE
+.vscode/
+.idea/
+
+# Environment
+.env
+*.log
+
+
+#Claude
+.claude
+CLAUDE.md 
+PLAN.md
+MODEL.md
