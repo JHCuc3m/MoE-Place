@@ -1,3 +1,9 @@
+- submodule update
+
+```bash
+git submodule update --remote --merge docs/MoE-Place-Overleaf
+```
+
 - Get partitions on Slurm
 ```bash
 sinfo -o "%P %G %D %T"
@@ -20,9 +26,51 @@ module load anaconda3/2023.03
 conda activate moe-place
 ```
 
-- Collect routing stats from pretrained model      
-  TinyMixtral-4x248M-MoE
+- Get Baseline
+```bash
+# Quick test (64 calibration samples, 50 eval batches, ~2-3 min)
+python scripts/benchmark_baseline.py --quick
+
+# Full baseline (128 calibration, full WikiText-2 test eval)
+python scripts/benchmark_baseline.py
+
+#Custom settings
+python scripts/benchmark_baseline.py --calibration_samples 256 --eval_batch_size 8
+```
+
+- Run Metrics Computation
+```bash
+python scripts/compute_pruning_metrics.py
+```
+
+- Visualize
 
 ```bash
-python scripts/collect_pretrained_routing.py --num_samples 500
+# Visualize all layers with pruning annotations
+python scripts/visualize_coactivation.py --annotate
+
+# Visualize only Layer 0
+python scripts/visualize_coactivation.py --layer 0 --annotate
+
+# Show plots interactively (instead of just saving)
+python scripts/visualize_coactivation.py --layer 0 --annotate --show
+```
+
+- Prune
+
+```bash
+# Prune top-N experts globally (based on structural score ranking)
+python scripts/evaluate_pruning.py --num_prune 1
+
+# Prune 1 expert per layer
+python scripts/evaluate_pruning.py --prune_per_layer 1
+
+# Prune specific experts (layer:expert format)
+python scripts/evaluate_pruning.py --prune_experts "0:1,5:2"
+
+# Run full sensitivity analysis (disable each expert one at a time)
+python scripts/evaluate_pruning.py --sensitivity
+
+# Quick test (50 eval batches)
+python scripts/evaluate_pruning.py --num_prune 1 --quick
 ```
