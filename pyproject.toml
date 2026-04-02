@@ -16,6 +16,9 @@ dependencies = [
     "einops>=0.7.0",
     "tqdm>=4.65.0",
     "pyyaml>=6.0",
+    "datasets>=2.16.0",
+    "networkx>=3.0",
+    "spicy",
 ]
 
 [project.optional-dependencies]
