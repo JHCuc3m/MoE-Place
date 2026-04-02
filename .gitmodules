@@ -1,3 +1,3 @@
 [submodule "MoE-Place-Overleaf"]
-	path = MoE-Place-Overleaf
+	path = docs/MoE-Place-Overleaf
 	url = https://github.com/JHCuc3m/MoE-Place-Overleaf.git
