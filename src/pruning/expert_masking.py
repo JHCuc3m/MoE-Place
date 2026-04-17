@@ -12,7 +12,18 @@ import torch.nn as nn
 from transformers import PreTrainedModel
 from typing import Dict, List, Set, Optional, Tuple, Any, Union
 from contextlib import contextmanager
+from pathlib import Path
 import logging
+
+import numpy as np
+
+# Optional imports for visualization
+try:
+    import matplotlib.pyplot as plt
+    import matplotlib.colors as mcolors
+    HAS_MATPLOTLIB = True
+except ImportError:
+    HAS_MATPLOTLIB = False
 
 logger = logging.getLogger(__name__)
 
@@ -43,18 +54,23 @@ class ExpertMasker:
     def _find_moe_layers(self) -> Dict[int, nn.Module]:
         """Find all MoE layer modules in the model."""
         moe_layers = {}
-        layer_idx = 0
 
         for name, module in self.model.named_modules():
-            # Match Mixtral MoE patterns
-            # TinyMixtral: "model.layers.X.block_sparse_moe"
-            # or similar patterns
-            name_lower = name.lower()
-            if any(pattern in name_lower for pattern in ["block_sparse_moe", "moe", "sparse_moe"]):
-                if hasattr(module, 'experts') or hasattr(module, 'expert'):
-                    moe_layers[layer_idx] = module
-                    logger.debug(f"Found MoE layer {layer_idx}: {name}")
-                    layer_idx += 1
+            # Match Mixtral MoE patterns by checking for required attributes
+            # In transformers, MixtralSparseMoeBlock has both 'gate' and 'experts'
+            # Note: The module may be named 'mlp' (not 'block_sparse_moe')
+            if hasattr(module, 'gate') and hasattr(module, 'experts'):
+                # Extract layer index from name like "model.layers.5.mlp"
+                parts = name.split('.')
+                for i, part in enumerate(parts):
+                    if part == 'layers' and i + 1 < len(parts):
+                        try:
+                            layer_idx = int(parts[i + 1])
+                            moe_layers[layer_idx] = module
+                            logger.info(f"Found MoE layer {layer_idx}: {name}")
+                            break
+                        except ValueError:
+                            pass
 
         return moe_layers
 
@@ -434,3 +450,87 @@ def print_sensitivity_summary(
         print(f"Expert {max_expert} ({scores[max_expert]:+.2f})")
 
     print("\n* = most sensitive expert in layer (highest PPL increase = most important)")
+
+
+def plot_sensitivity_heatmap(
+    sensitivity: Dict[Tuple[int, int], float],
+    num_layers: int,
+    num_experts: int = 4,
+    save_path: Optional[str] = None,
+    title: Optional[str] = None,
+    figsize: tuple = (10, 8),
+) -> Optional[Any]:
+    """
+    Plot sensitivity scores as a heatmap table.
+
+    Args:
+        sensitivity: Dictionary mapping (layer_idx, expert_idx) to sensitivity score
+        num_layers: Number of MoE layers
+        num_experts: Number of experts per layer
+        save_path: If provided, save figure to this path
+        title: Plot title (auto-generated if None)
+        figsize: Figure size
+
+    Returns:
+        matplotlib figure if available, None otherwise
+    """
+    if not HAS_MATPLOTLIB:
+        logger.warning("matplotlib not installed. Install with: pip install matplotlib")
+        return None
+
+    # Build matrix from sensitivity dict
+    matrix = np.zeros((num_layers, num_experts))
+    for (layer_idx, expert_idx), score in sensitivity.items():
+        if layer_idx < num_layers and expert_idx < num_experts:
+            matrix[layer_idx, expert_idx] = score
+
+    fig, ax = plt.subplots(figsize=figsize)
+
+    # Use diverging colormap centered at 0 (red=bad/high sensitivity, blue=good/negative)
+    max_abs = max(abs(matrix.min()), abs(matrix.max()))
+    norm = mcolors.TwoSlopeNorm(vmin=-max_abs, vcenter=0, vmax=max_abs)
+
+    im = ax.imshow(matrix, cmap='RdBu_r', aspect='auto', norm=norm)
+
+    # Add colorbar
+    cbar = ax.figure.colorbar(im, ax=ax)
+    cbar.ax.set_ylabel("PPL Increase (negative = pruning helps)", rotation=-90, va="bottom")
+
+    # Set ticks
+    ax.set_xticks(np.arange(num_experts))
+    ax.set_yticks(np.arange(num_layers))
+    ax.set_xticklabels([f"Expert {i}" for i in range(num_experts)])
+    ax.set_yticklabels([f"Layer {i}" for i in range(num_layers)])
+
+    # Add values in cells
+    for i in range(num_layers):
+        for j in range(num_experts):
+            value = matrix[i, j]
+            # Choose text color based on background intensity
+            text_color = "white" if abs(value) > max_abs * 0.5 else "black"
+            ax.text(j, i, f"{value:+.1f}", ha="center", va="center",
+                   color=text_color, fontsize=8, fontweight='bold')
+
+    # Mark most sensitive expert per layer with a border
+    for layer_idx in range(num_layers):
+        row = matrix[layer_idx, :]
+        max_expert = np.argmax(row)
+        rect = plt.Rectangle((max_expert - 0.5, layer_idx - 0.5), 1, 1,
+                             fill=False, edgecolor='gold', linewidth=3)
+        ax.add_patch(rect)
+
+    # Title and labels
+    if title is None:
+        title = "Expert Sensitivity Analysis\n(PPL increase when disabled; gold border = most sensitive)"
+    ax.set_title(title, fontsize=12, fontweight='bold')
+    ax.set_xlabel("Expert", fontsize=11)
+    ax.set_ylabel("Layer", fontsize=11)
+
+    plt.tight_layout()
+
+    if save_path:
+        plt.savefig(save_path, dpi=150, bbox_inches='tight')
+        logger.info(f"Saved sensitivity heatmap to {save_path}")
+        print(f"Saved sensitivity heatmap to {save_path}")
+
+    return fig

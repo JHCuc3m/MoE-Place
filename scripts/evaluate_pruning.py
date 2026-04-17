@@ -42,6 +42,7 @@ from src.pruning.expert_masking import (
     MixtralExpertMasker,
     compute_sensitivity,
     print_sensitivity_summary,
+    plot_sensitivity_heatmap,
 )
 
 
@@ -215,6 +216,19 @@ def main():
 
         print_sensitivity_summary(sensitivity_results, num_experts)
 
+        # Generate sensitivity heatmap plot
+        plot_path = Path(args.output_dir) / "sensitivity_heatmap.png"
+        plot_path.parent.mkdir(parents=True, exist_ok=True)
+        fig = plot_sensitivity_heatmap(
+            sensitivity_results,
+            num_layers=num_layers,
+            num_experts=num_experts,
+            save_path=str(plot_path),
+        )
+        if fig is not None:
+            import matplotlib.pyplot as plt
+            plt.close(fig)
+
     # =========================================================================
     # Pruning evaluation
     # =========================================================================
@@ -311,7 +325,12 @@ def main():
             for (l, e), score in sensitivity_results.items()
         }
 
-    results_path = output_dir / "pruning_results.json"
+    # Use different filename for sensitivity analysis vs pruning evaluation
+    if args.sensitivity:
+        results_path = output_dir / "sensitivity_results.json"
+    else:
+        results_path = output_dir / "pruning_results.json"
+
     with open(results_path, 'w') as f:
         json.dump(results, f, indent=2)
     print(f"\nResults saved to: {results_path}")
