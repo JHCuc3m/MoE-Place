@@ -24,3 +24,12 @@ CLAUDE.md
 PLAN.md
 MODEL.md
 FINDING.md
+
+#Debug
+scripts/debug_*
+
+#Docs
+docs/new_direction_*
+
+#Jobs
+scripts/jobs/
