@@ -15,12 +15,22 @@ logger = logging.getLogger(__name__)
 
 # Supported pretrained models
 TINY_MIXTRAL = "Isotonic/TinyMixtral-4x248M-MoE"
+DEEPSEEK_MOE_16B = "deepseek-ai/deepseek-moe-16b-base"
+QWEN_MOE_A2_7B = "Qwen/Qwen1.5-MoE-A2.7B"
+
+# Model family detection
+MODEL_FAMILIES = {
+    "mixtral": ["TinyMixtral", "Mixtral"],
+    "deepseek": ["deepseek-moe"],
+    "qwen": ["Qwen", "qwen"],
+}
 
 
 def load_pretrained_moe(
     model_name: str = TINY_MIXTRAL,
     device: str = "cuda",
-    dtype: torch.dtype = torch.float16,
+    dtype: torch.dtype = None,
+    trust_remote_code: bool = True,
 ) -> Tuple[AutoModelForCausalLM, AutoTokenizer]:
     """
     Load a pretrained MoE model from HuggingFace.
@@ -28,23 +38,42 @@ def load_pretrained_moe(
     Args:
         model_name: HuggingFace model identifier
         device: Device to load model on
-        dtype: Model dtype
+        dtype: Model dtype (defaults to bfloat16 for DeepSeek, float16 for others)
+        trust_remote_code: Whether to trust remote code (required for DeepSeek)
 
     Returns:
         Tuple of (model, tokenizer)
     """
     logger.info(f"Loading pretrained MoE: {model_name}")
 
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    # Detect model family for appropriate defaults
+    model_family = detect_model_family(model_name)
+    logger.info(f"Detected model family: {model_family}")
+
+    # Set default dtype based on model family
+    if dtype is None:
+        if model_family == "deepseek":
+            dtype = torch.bfloat16  # DeepSeek recommends bfloat16
+        else:
+            dtype = torch.float16
+
+    tokenizer = AutoTokenizer.from_pretrained(
+        model_name,
+        trust_remote_code=trust_remote_code,
+    )
 
     # Set pad token if not set
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
+    # Use eager attention to avoid flash_attn version compatibility issues
+    # DeepSeek's model code may require specific flash_attn versions
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
-        dtype=dtype,  # Updated from torch_dtype (deprecated)
+        torch_dtype=dtype,
         device_map=device,
+        trust_remote_code=trust_remote_code,
+        attn_implementation="eager",  # Avoid flash_attn compatibility issues
     )
 
     model.eval()
@@ -56,21 +85,59 @@ def load_pretrained_moe(
     return model, tokenizer
 
 
+def detect_model_family(model_name: str) -> str:
+    """Detect the model family from model name."""
+    model_name_lower = model_name.lower()
+    for family, patterns in MODEL_FAMILIES.items():
+        for pattern in patterns:
+            if pattern.lower() in model_name_lower:
+                return family
+    return "unknown"
+
+
 def get_moe_config(model: AutoModelForCausalLM) -> Dict[str, Any]:
     """
     Extract MoE configuration from a pretrained model.
 
+    Handles different model families:
+    - Mixtral: num_local_experts, num_experts_per_tok
+    - DeepSeek: n_routed_experts, n_shared_experts, num_experts_per_tok
+
     Returns dict with MoE-relevant configuration.
     """
     config = model.config
+    model_type = getattr(config, "model_type", "unknown")
+
+    # Extract num_experts based on model type
+    # Mixtral uses num_local_experts, DeepSeek uses n_routed_experts
+    num_routed_experts = (
+        getattr(config, "num_local_experts", None) or
+        getattr(config, "n_routed_experts", None) or
+        getattr(config, "num_experts", None)
+    )
+
+    num_shared_experts = getattr(config, "n_shared_experts", 0)
+
+    # DeepSeek-specific: first_k_dense_replace means first k layers are dense (not MoE)
+    first_k_dense = getattr(config, "first_k_dense_replace", 0)
+
+    # MoE layer frequency (1 = every layer, 2 = every other layer)
+    moe_layer_freq = getattr(config, "moe_layer_freq", 1)
 
     return {
-        "model_type": getattr(config, "model_type", "unknown"),
+        "model_type": model_type,
+        "model_family": detect_model_family(str(type(model))),
         "num_layers": getattr(config, "num_hidden_layers", None),
         "hidden_size": getattr(config, "hidden_size", None),
-        "num_experts": getattr(config, "num_local_experts", None),
+        "num_routed_experts": num_routed_experts,
+        "num_shared_experts": num_shared_experts,
         "num_experts_per_tok": getattr(config, "num_experts_per_tok", None),
         "intermediate_size": getattr(config, "intermediate_size", None),
+        "moe_intermediate_size": getattr(config, "moe_intermediate_size", None),
+        "first_k_dense_replace": first_k_dense,
+        "moe_layer_freq": moe_layer_freq,
+        # Legacy field for backward compatibility
+        "num_experts": num_routed_experts,
     }
 
 

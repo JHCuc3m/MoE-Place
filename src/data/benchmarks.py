@@ -4,8 +4,13 @@ Benchmark data loading for MoE analysis and evaluation.
 Provides lightweight data loading for:
 - Co-activation calibration (small subset)
 - Perplexity evaluation (full test set)
+- Domain generalization testing (code, math, QA)
 
-Primary benchmark: WikiText-2 (small, standard LM benchmark)
+Supported datasets:
+- WikiText-2: General text (primary benchmark)
+- CodeParrot: Python code
+- GSM8K: Math word problems
+- PubMed: Scientific abstracts
 """
 
 import torch
@@ -124,6 +129,249 @@ def load_wikitext2(
         torch_dataset = WikiTextDataset(texts, tokenizer)
 
     return texts, torch_dataset
+
+
+def load_code_data(
+    split: str = "train",
+    tokenizer: Optional[PreTrainedTokenizer] = None,
+    max_samples: Optional[int] = None,
+    max_length: int = 512,
+) -> Tuple[List[str], Optional[WikiTextDataset]]:
+    """
+    Load Python code data from CodeParrot.
+
+    Args:
+        split: Dataset split ("train")
+        tokenizer: Optional tokenizer for creating dataset
+        max_samples: Maximum number of code samples to load
+        max_length: Maximum sequence length
+
+    Returns:
+        Tuple of (raw_texts, dataset)
+    """
+    logger.info(f"Loading CodeParrot {split} split...")
+
+    try:
+        # Use streaming to avoid downloading full dataset
+        dataset = load_dataset(
+            "codeparrot/codeparrot-clean-train",
+            split=split,
+            streaming=True,
+        )
+
+        # Collect samples
+        texts = []
+        for i, item in enumerate(dataset):
+            if max_samples and i >= max_samples:
+                break
+            content = item.get("content", "")
+            if content.strip() and len(content) >= 100:
+                texts.append(content)
+
+    except Exception as e:
+        logger.warning(f"Failed to load CodeParrot: {e}. Using fallback.")
+        # Fallback: generate simple code samples
+        texts = [
+            "def fibonacci(n):\n    if n <= 1:\n        return n\n    return fibonacci(n-1) + fibonacci(n-2)\n",
+            "class DataProcessor:\n    def __init__(self, data):\n        self.data = data\n    def process(self):\n        return [x * 2 for x in self.data]\n",
+        ] * (max_samples // 2 if max_samples else 50)
+
+    logger.info(f"Loaded {len(texts)} code samples")
+
+    torch_dataset = None
+    if tokenizer is not None:
+        torch_dataset = WikiTextDataset(texts, tokenizer, max_length=max_length)
+
+    return texts, torch_dataset
+
+
+def load_math_data(
+    split: str = "train",
+    tokenizer: Optional[PreTrainedTokenizer] = None,
+    max_samples: Optional[int] = None,
+    max_length: int = 512,
+) -> Tuple[List[str], Optional[WikiTextDataset]]:
+    """
+    Load math word problems from GSM8K.
+
+    Args:
+        split: Dataset split ("train", "test")
+        tokenizer: Optional tokenizer for creating dataset
+        max_samples: Maximum number of samples to load
+        max_length: Maximum sequence length
+
+    Returns:
+        Tuple of (raw_texts, dataset)
+    """
+    logger.info(f"Loading GSM8K {split} split...")
+
+    try:
+        dataset = load_dataset("gsm8k", "main", split=split)
+
+        # Combine question and answer
+        texts = []
+        for item in dataset:
+            question = item.get("question", "")
+            answer = item.get("answer", "")
+            if question.strip():
+                full_text = f"Question: {question}\nAnswer: {answer}"
+                texts.append(full_text)
+
+        if max_samples is not None:
+            texts = texts[:max_samples]
+
+    except Exception as e:
+        logger.warning(f"Failed to load GSM8K: {e}. Using fallback.")
+        texts = [
+            "Question: If John has 5 apples and buys 3 more, how many apples does he have?\nAnswer: John has 5 + 3 = 8 apples.",
+            "Question: A train travels 60 miles per hour. How far does it travel in 2.5 hours?\nAnswer: Distance = 60 * 2.5 = 150 miles.",
+        ] * (max_samples // 2 if max_samples else 50)
+
+    logger.info(f"Loaded {len(texts)} math samples")
+
+    torch_dataset = None
+    if tokenizer is not None:
+        torch_dataset = WikiTextDataset(texts, tokenizer, max_length=max_length)
+
+    return texts, torch_dataset
+
+
+def load_scientific_data(
+    split: str = "train",
+    tokenizer: Optional[PreTrainedTokenizer] = None,
+    max_samples: Optional[int] = None,
+    max_length: int = 512,
+) -> Tuple[List[str], Optional[WikiTextDataset]]:
+    """
+    Load scientific text from PubMed abstracts.
+
+    Args:
+        split: Dataset split ("train")
+        tokenizer: Optional tokenizer for creating dataset
+        max_samples: Maximum number of samples to load
+        max_length: Maximum sequence length
+
+    Returns:
+        Tuple of (raw_texts, dataset)
+    """
+    logger.info(f"Loading scientific data...")
+
+    try:
+        # Use ccdv/pubmed-summarization which has abstracts
+        dataset = load_dataset(
+            "ccdv/pubmed-summarization",
+            "document",
+            split=split,
+            streaming=True,
+        )
+
+        texts = []
+        for i, item in enumerate(dataset):
+            if max_samples and i >= max_samples:
+                break
+            abstract = item.get("abstract", item.get("article", ""))
+            if abstract.strip() and len(abstract) >= 100:
+                texts.append(abstract)
+
+    except Exception as e:
+        logger.warning(f"Failed to load PubMed: {e}. Using arxiv abstracts.")
+        try:
+            # Fallback to arxiv
+            dataset = load_dataset("arxiv_dataset", split="train", streaming=True)
+            texts = []
+            for i, item in enumerate(dataset):
+                if max_samples and i >= max_samples:
+                    break
+                abstract = item.get("abstract", "")
+                if abstract.strip() and len(abstract) >= 100:
+                    texts.append(abstract)
+        except Exception:
+            logger.warning("Using synthetic scientific text as fallback.")
+            texts = [
+                "Abstract: This study investigates the effects of temperature on protein folding dynamics. We employed molecular dynamics simulations to analyze conformational changes.",
+                "Abstract: We present a novel approach to quantum error correction using topological codes. Our method achieves fault-tolerant computation with reduced overhead.",
+            ] * (max_samples // 2 if max_samples else 50)
+
+    logger.info(f"Loaded {len(texts)} scientific samples")
+
+    torch_dataset = None
+    if tokenizer is not None:
+        torch_dataset = WikiTextDataset(texts, tokenizer, max_length=max_length)
+
+    return texts, torch_dataset
+
+
+# Registry of available datasets
+DATASET_REGISTRY = {
+    "wikitext2": {
+        "loader": load_wikitext2,
+        "description": "General text (Wikipedia)",
+        "domain": "general",
+    },
+    "code": {
+        "loader": load_code_data,
+        "description": "Python code (CodeParrot)",
+        "domain": "code",
+    },
+    "math": {
+        "loader": load_math_data,
+        "description": "Math word problems (GSM8K)",
+        "domain": "math",
+    },
+    "scientific": {
+        "loader": load_scientific_data,
+        "description": "Scientific abstracts (PubMed)",
+        "domain": "scientific",
+    },
+}
+
+
+def get_available_datasets() -> List[str]:
+    """Return list of available dataset names."""
+    return list(DATASET_REGISTRY.keys())
+
+
+def load_dataset_by_name(
+    name: str,
+    tokenizer: PreTrainedTokenizer,
+    max_samples: int = 128,
+    max_length: int = 512,
+) -> Tuple[List[str], WikiTextDataset]:
+    """
+    Load a dataset by name.
+
+    Args:
+        name: Dataset name (e.g., "wikitext2", "code", "math", "scientific")
+        tokenizer: HuggingFace tokenizer
+        max_samples: Maximum number of samples
+        max_length: Maximum sequence length
+
+    Returns:
+        Tuple of (raw_texts, dataset)
+    """
+    if name not in DATASET_REGISTRY:
+        raise ValueError(f"Unknown dataset: {name}. Available: {list(DATASET_REGISTRY.keys())}")
+
+    loader = DATASET_REGISTRY[name]["loader"]
+
+    if name == "wikitext2":
+        # WikiText loader has different signature
+        texts, _ = loader(split="train", tokenizer=None, max_samples=max_samples)
+        texts = [t for t in texts if len(t.strip()) >= 50]
+        if len(texts) > max_samples:
+            import random
+            random.seed(42)
+            texts = random.sample(texts, max_samples)
+        dataset = WikiTextDataset(texts, tokenizer, max_length=max_length)
+    else:
+        texts, dataset = loader(
+            split="train",
+            tokenizer=tokenizer,
+            max_samples=max_samples,
+            max_length=max_length,
+        )
+
+    return texts, dataset
 
 
 def get_calibration_data(
