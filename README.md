@@ -1,4 +1,4 @@
-# MoE-Place
+# MoE-Prune
 
 Code for **"Co-Activation Aware Expert Pruning for Mixture-of-Experts Models"**.
 
