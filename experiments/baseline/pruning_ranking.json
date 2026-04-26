@@ -1,0 +1,290 @@
+[
+  {
+    "rank": 1,
+    "layer": 0,
+    "expert": 1,
+    "score": 0.7886659360021842
+  },
+  {
+    "rank": 2,
+    "layer": 1,
+    "expert": 3,
+    "score": 0.8918694890496643
+  },
+  {
+    "rank": 3,
+    "layer": 2,
+    "expert": 2,
+    "score": 0.6003194034099579
+  },
+  {
+    "rank": 4,
+    "layer": 3,
+    "expert": 0,
+    "score": 0.600000011920929
+  },
+  {
+    "rank": 5,
+    "layer": 4,
+    "expert": 0,
+    "score": 0.600000011920929
+  },
+  {
+    "rank": 6,
+    "layer": 5,
+    "expert": 0,
+    "score": 0.600000011920929
+  },
+  {
+    "rank": 7,
+    "layer": 6,
+    "expert": 0,
+    "score": 0.600000011920929
+  },
+  {
+    "rank": 8,
+    "layer": 7,
+    "expert": 0,
+    "score": 0.600000011920929
+  },
+  {
+    "rank": 9,
+    "layer": 8,
+    "expert": 0,
+    "score": 0.6203570118874656
+  },
+  {
+    "rank": 10,
+    "layer": 9,
+    "expert": 3,
+    "score": 0.8511788282805114
+  },
+  {
+    "rank": 11,
+    "layer": 10,
+    "expert": 3,
+    "score": 0.7581358868340362
+  },
+  {
+    "rank": 12,
+    "layer": 11,
+    "expert": 3,
+    "score": 0.621626847926908
+  },
+  {
+    "rank": 13,
+    "layer": 0,
+    "expert": 3,
+    "score": 0.6368674052619955
+  },
+  {
+    "rank": 14,
+    "layer": 1,
+    "expert": 0,
+    "score": 0.8321578979492188
+  },
+  {
+    "rank": 15,
+    "layer": 2,
+    "expert": 1,
+    "score": 0.4547561985976672
+  },
+  {
+    "rank": 16,
+    "layer": 3,
+    "expert": 1,
+    "score": 0.5519655131963164
+  },
+  {
+    "rank": 17,
+    "layer": 4,
+    "expert": 3,
+    "score": 0.4031212329864502
+  },
+  {
+    "rank": 18,
+    "layer": 5,
+    "expert": 1,
+    "score": 0.43127399792147375
+  },
+  {
+    "rank": 19,
+    "layer": 6,
+    "expert": 1,
+    "score": 0.5840550250579667
+  },
+  {
+    "rank": 20,
+    "layer": 7,
+    "expert": 3,
+    "score": 0.5249684151879013
+  },
+  {
+    "rank": 21,
+    "layer": 8,
+    "expert": 1,
+    "score": 0.600000011920929
+  },
+  {
+    "rank": 22,
+    "layer": 9,
+    "expert": 1,
+    "score": 0.7235982596874238
+  },
+  {
+    "rank": 23,
+    "layer": 10,
+    "expert": 1,
+    "score": 0.600000011920929
+  },
+  {
+    "rank": 24,
+    "layer": 11,
+    "expert": 1,
+    "score": 0.600000011920929
+  },
+  {
+    "rank": 25,
+    "layer": 0,
+    "expert": 2,
+    "score": 0.600000011920929
+  },
+  {
+    "rank": 26,
+    "layer": 1,
+    "expert": 2,
+    "score": 0.6167741260249896
+  },
+  {
+    "rank": 27,
+    "layer": 2,
+    "expert": 0,
+    "score": 0.44027752283172616
+  },
+  {
+    "rank": 28,
+    "layer": 3,
+    "expert": 2,
+    "score": 0.46619070798703754
+  },
+  {
+    "rank": 29,
+    "layer": 4,
+    "expert": 1,
+    "score": 0.3927094525887031
+  },
+  {
+    "rank": 30,
+    "layer": 5,
+    "expert": 2,
+    "score": 0.3898177269481761
+  },
+  {
+    "rank": 31,
+    "layer": 6,
+    "expert": 2,
+    "score": 0.44784336903287586
+  },
+  {
+    "rank": 32,
+    "layer": 7,
+    "expert": 1,
+    "score": 0.5057831117156928
+  },
+  {
+    "rank": 33,
+    "layer": 8,
+    "expert": 3,
+    "score": 0.5517858658948037
+  },
+  {
+    "rank": 34,
+    "layer": 9,
+    "expert": 0,
+    "score": 0.699350693129124
+  },
+  {
+    "rank": 35,
+    "layer": 10,
+    "expert": 0,
+    "score": 0.5525256637243041
+  },
+  {
+    "rank": 36,
+    "layer": 11,
+    "expert": 0,
+    "score": 0.553377794174389
+  },
+  {
+    "rank": 37,
+    "layer": 0,
+    "expert": 0,
+    "score": 0.011515415273606777
+  },
+  {
+    "rank": 38,
+    "layer": 1,
+    "expert": 1,
+    "score": 0.0
+  },
+  {
+    "rank": 39,
+    "layer": 2,
+    "expert": 3,
+    "score": 0.3029636740684509
+  },
+  {
+    "rank": 40,
+    "layer": 3,
+    "expert": 3,
+    "score": 0.07798420637845993
+  },
+  {
+    "rank": 41,
+    "layer": 4,
+    "expert": 2,
+    "score": 0.3901111701489719
+  },
+  {
+    "rank": 42,
+    "layer": 5,
+    "expert": 3,
+    "score": 0.3498755395412445
+  },
+  {
+    "rank": 43,
+    "layer": 6,
+    "expert": 3,
+    "score": 0.3345206379890442
+  },
+  {
+    "rank": 44,
+    "layer": 7,
+    "expert": 2,
+    "score": 0.16604328155517578
+  },
+  {
+    "rank": 45,
+    "layer": 8,
+    "expert": 2,
+    "score": 0.2389635592699051
+  },
+  {
+    "rank": 46,
+    "layer": 9,
+    "expert": 2,
+    "score": 0.0
+  },
+  {
+    "rank": 47,
+    "layer": 10,
+    "expert": 2,
+    "score": 0.0974394753575325
+  },
+  {
+    "rank": 48,
+    "layer": 11,
+    "expert": 2,
+    "score": 0.10132592171430588
+  }
+]

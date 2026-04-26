@@ -1,0 +1,218 @@
+{
+  "metric_analysis": {
+    "utilization": {
+      "display_name": "Utilization (low=prune)",
+      "ranking_agreement": {
+        "top1_agreement": 0.16666666666666666,
+        "top1_matches": 2,
+        "num_layers": 12,
+        "spearman_correlation": 0.18333333333333332,
+        "spearman_p_value": 0.21229008969068555,
+        "kendall_tau": 0.193287037037037,
+        "kendall_p_value": 0.11211682851820515
+      },
+      "value_correlation": {
+        "pearson_correlation": -0.11618926468823018,
+        "pearson_p_value": 0.43161403491514694,
+        "spearman_correlation": 0.06225744296265123,
+        "spearman_p_value": 0.6742147182164433
+      }
+    },
+    "redundancy": {
+      "display_name": "Redundancy (high=prune)",
+      "ranking_agreement": {
+        "top1_agreement": 0.16666666666666666,
+        "top1_matches": 2,
+        "num_layers": 12,
+        "spearman_correlation": -0.3499999999999999,
+        "spearman_p_value": 0.01474290823881473,
+        "kendall_tau": -0.2708333333333333,
+        "kendall_p_value": 0.02600394822123471
+      },
+      "value_correlation": {
+        "pearson_correlation": 0.28023798902237884,
+        "pearson_p_value": 0.05370361942277016,
+        "spearman_correlation": 0.2712765957446808,
+        "spearman_p_value": 0.06217301750578837
+      }
+    },
+    "eigenvector_centrality": {
+      "display_name": "Centrality (low=prune)",
+      "ranking_agreement": {
+        "top1_agreement": 0.16666666666666666,
+        "top1_matches": 2,
+        "num_layers": 12,
+        "spearman_correlation": 0.23333333333333334,
+        "spearman_p_value": 0.1104693377202664,
+        "kendall_tau": 0.2222222222222222,
+        "kendall_p_value": 0.0677619024520271
+      },
+      "value_correlation": {
+        "pearson_correlation": -0.062290294113669056,
+        "pearson_p_value": 0.6740523934354864,
+        "spearman_correlation": 0.08792878853669127,
+        "spearman_p_value": 0.552322589155364
+      }
+    },
+    "structural_score": {
+      "display_name": "Structural Score",
+      "ranking_agreement": {
+        "top1_agreement": 0.08333333333333333,
+        "top1_matches": 1,
+        "num_layers": 12,
+        "spearman_correlation": -0.03333333333333333,
+        "spearman_p_value": 0.8220453818903507,
+        "kendall_tau": -0.018518518518518517,
+        "kendall_p_value": 0.8790169091347337
+      },
+      "value_correlation": {
+        "pearson_correlation": 0.21453031689124782,
+        "pearson_p_value": 0.1431283412701162,
+        "spearman_correlation": 0.06333249717090475,
+        "spearman_p_value": 0.6689102886791793
+      }
+    }
+  },
+  "expert2_analysis": {
+    "sensitivity": [
+      -155.67908772464523,
+      -79.12835852206786,
+      -80.88619295185151,
+      -110.62794168548726,
+      -152.45331809581967,
+      -162.2026930057168,
+      -156.94277312641043,
+      -162.95535056015137,
+      -94.33031310110175,
+      -84.70836952632499,
+      -107.58959257778372,
+      -89.11069771093821
+    ],
+    "utilization": [
+      0.17243631184101105,
+      0.2749585509300232,
+      0.17663165926933289,
+      0.22913631796836853,
+      0.2915892004966736,
+      0.28141486644744873,
+      0.30668744444847107,
+      0.3424358069896698,
+      0.3334673047065735,
+      0.3740893304347992,
+      0.38770538568496704,
+      0.41348037123680115
+    ],
+    "redundancy": [
+      0.4229312241077423,
+      0.504613995552063,
+      0.41217464208602905,
+      0.4663962423801422,
+      0.44507625699043274,
+      0.43974289298057556,
+      0.5479193925857544,
+      0.4946812391281128,
+      0.5121289491653442,
+      0.388489693403244,
+      0.4955614507198334,
+      0.5096907615661621
+    ],
+    "eigenvector_centrality": [
+      0.355973588043913,
+      0.5409903113705881,
+      0.36990922309273294,
+      0.46810408223590094,
+      0.558099373822628,
+      0.5422434129988151,
+      0.5842014389561074,
+      0.6161351594429096,
+      0.6119102276564473,
+      0.6394282134502588,
+      0.6552209170020042,
+      0.6669726911864938
+    ],
+    "structural_score": [
+      0.600000011920929,
+      0.6167741260249895,
+      0.6003194034099579,
+      0.46619070798703777,
+      0.39011117014897206,
+      0.3898177269481751,
+      0.44784336903287586,
+      0.16604328155517578,
+      0.2389635592699051,
+      0.0,
+      0.0974394753575325,
+      0.10132592171430588
+    ],
+    "utilization_rank": [
+      1,
+      3,
+      1,
+      2,
+      4,
+      2,
+      3,
+      4,
+      4,
+      4,
+      4,
+      4
+    ],
+    "redundancy_rank": [
+      4,
+      1,
+      3,
+      2,
+      2,
+      3,
+      1,
+      3,
+      2,
+      4,
+      3,
+      3
+    ],
+    "centrality_rank": [
+      1,
+      3,
+      1,
+      2,
+      3,
+      2,
+      3,
+      4,
+      4,
+      4,
+      4,
+      4
+    ],
+    "structural_rank": [
+      3,
+      3,
+      1,
+      3,
+      4,
+      3,
+      3,
+      4,
+      4,
+      4,
+      4,
+      4
+    ],
+    "summary": {
+      "avg_sensitivity": -119.71789071569157,
+      "always_negative": true,
+      "avg_utilization_rank": 3.0,
+      "avg_redundancy_rank": 2.5833333333333335,
+      "avg_centrality_rank": 2.9166666666666665,
+      "avg_structural_rank": 3.3333333333333335,
+      "times_ranked_1st_by_utilization": 2,
+      "times_ranked_1st_by_redundancy": 2,
+      "times_ranked_1st_by_centrality": 2,
+      "times_ranked_1st_by_structural": 1
+    }
+  },
+  "num_layers": 12,
+  "num_experts": 4
+}

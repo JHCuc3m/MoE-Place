@@ -1,0 +1,852 @@
+{
+  "summary": {
+    "num_layers": 12,
+    "num_experts": 4,
+    "per_layer_stats": {
+      "0": {
+        "total_activations": 19694,
+        "most_used_expert": 0,
+        "least_used_expert": 1,
+        "load_balance_std": 2192.494873046875,
+        "expert_counts": [
+          7277,
+          2671,
+          3494,
+          6252
+        ]
+      },
+      "1": {
+        "total_activations": 19694,
+        "most_used_expert": 1,
+        "least_used_expert": 3,
+        "load_balance_std": 1584.0699462890625,
+        "expert_counts": [
+          5174,
+          7066,
+          3803,
+          3651
+        ]
+      },
+      "2": {
+        "total_activations": 19694,
+        "most_used_expert": 1,
+        "least_used_expert": 2,
+        "load_balance_std": 1998.5118408203125,
+        "expert_counts": [
+          5058,
+          7357,
+          2468,
+          4811
+        ]
+      },
+      "3": {
+        "total_activations": 19694,
+        "most_used_expert": 1,
+        "least_used_expert": 2,
+        "load_balance_std": 1077.190673828125,
+        "expert_counts": [
+          5118,
+          5986,
+          3422,
+          5168
+        ]
+      },
+      "4": {
+        "total_activations": 19694,
+        "most_used_expert": 1,
+        "least_used_expert": 2,
+        "load_balance_std": 1193.0303955078125,
+        "expert_counts": [
+          5357,
+          6130,
+          3303,
+          4904
+        ]
+      },
+      "5": {
+        "total_activations": 19694,
+        "most_used_expert": 1,
+        "least_used_expert": 2,
+        "load_balance_std": 1242.3140869140625,
+        "expert_counts": [
+          4383,
+          6570,
+          3658,
+          5083
+        ]
+      },
+      "6": {
+        "total_activations": 19694,
+        "most_used_expert": 1,
+        "least_used_expert": 2,
+        "load_balance_std": 1339.063720703125,
+        "expert_counts": [
+          5081,
+          6081,
+          3011,
+          5521
+        ]
+      },
+      "7": {
+        "total_activations": 19694,
+        "most_used_expert": 1,
+        "least_used_expert": 2,
+        "load_balance_std": 1525.2388916015625,
+        "expert_counts": [
+          5298,
+          6421,
+          2795,
+          5180
+        ]
+      },
+      "8": {
+        "total_activations": 19694,
+        "most_used_expert": 1,
+        "least_used_expert": 2,
+        "load_balance_std": 1690.54833984375,
+        "expert_counts": [
+          6108,
+          6434,
+          2783,
+          4369
+        ]
+      },
+      "9": {
+        "total_activations": 19694,
+        "most_used_expert": 1,
+        "least_used_expert": 2,
+        "load_balance_std": 2124.566650390625,
+        "expert_counts": [
+          6509,
+          6966,
+          2739,
+          3480
+        ]
+      },
+      "10": {
+        "total_activations": 19694,
+        "most_used_expert": 0,
+        "least_used_expert": 2,
+        "load_balance_std": 2290.720947265625,
+        "expert_counts": [
+          7128,
+          6621,
+          2532,
+          3413
+        ]
+      },
+      "11": {
+        "total_activations": 19694,
+        "most_used_expert": 0,
+        "least_used_expert": 2,
+        "load_balance_std": 1534.9267578125,
+        "expert_counts": [
+          6619,
+          5772,
+          3307,
+          3996
+        ]
+      }
+    }
+  },
+  "collaboration_matrices": {
+    "0": [
+      [
+        7277.0,
+        1616.0,
+        1422.0,
+        4239.0
+      ],
+      [
+        1616.0,
+        2671.0,
+        557.0,
+        498.0
+      ],
+      [
+        1422.0,
+        557.0,
+        3494.0,
+        1515.0
+      ],
+      [
+        4239.0,
+        498.0,
+        1515.0,
+        6252.0
+      ]
+    ],
+    "1": [
+      [
+        5174.0,
+        3091.0,
+        1245.0,
+        838.0
+      ],
+      [
+        3091.0,
+        7066.0,
+        1860.0,
+        2115.0
+      ],
+      [
+        1245.0,
+        1860.0,
+        3803.0,
+        698.0
+      ],
+      [
+        838.0,
+        2115.0,
+        698.0,
+        3651.0
+      ]
+    ],
+    "2": [
+      [
+        5058.0,
+        3323.0,
+        513.0,
+        1222.0
+      ],
+      [
+        3323.0,
+        7357.0,
+        1200.0,
+        2834.0
+      ],
+      [
+        513.0,
+        1200.0,
+        2468.0,
+        755.0
+      ],
+      [
+        1222.0,
+        2834.0,
+        755.0,
+        4811.0
+      ]
+    ],
+    "3": [
+      [
+        5118.0,
+        2452.0,
+        992.0,
+        1674.0
+      ],
+      [
+        2452.0,
+        5986.0,
+        1235.0,
+        2299.0
+      ],
+      [
+        992.0,
+        1235.0,
+        3422.0,
+        1195.0
+      ],
+      [
+        1674.0,
+        2299.0,
+        1195.0,
+        5168.0
+      ]
+    ],
+    "4": [
+      [
+        5357.0,
+        2787.0,
+        933.0,
+        1637.0
+      ],
+      [
+        2787.0,
+        6130.0,
+        1223.0,
+        2120.0
+      ],
+      [
+        933.0,
+        1223.0,
+        3303.0,
+        1147.0
+      ],
+      [
+        1637.0,
+        2120.0,
+        1147.0,
+        4904.0
+      ]
+    ],
+    "5": [
+      [
+        4383.0,
+        2251.0,
+        781.0,
+        1351.0
+      ],
+      [
+        2251.0,
+        6570.0,
+        1732.0,
+        2587.0
+      ],
+      [
+        781.0,
+        1732.0,
+        3658.0,
+        1145.0
+      ],
+      [
+        1351.0,
+        2587.0,
+        1145.0,
+        5083.0
+      ]
+    ],
+    "6": [
+      [
+        5081.0,
+        2459.0,
+        854.0,
+        1768.0
+      ],
+      [
+        2459.0,
+        6081.0,
+        1013.0,
+        2609.0
+      ],
+      [
+        854.0,
+        1013.0,
+        3011.0,
+        1144.0
+      ],
+      [
+        1768.0,
+        2609.0,
+        1144.0,
+        5521.0
+      ]
+    ],
+    "7": [
+      [
+        5298.0,
+        2789.0,
+        727.0,
+        1782.0
+      ],
+      [
+        2789.0,
+        6421.0,
+        1151.0,
+        2481.0
+      ],
+      [
+        727.0,
+        1151.0,
+        2795.0,
+        917.0
+      ],
+      [
+        1782.0,
+        2481.0,
+        917.0,
+        5180.0
+      ]
+    ],
+    "8": [
+      [
+        6108.0,
+        3545.0,
+        983.0,
+        1580.0
+      ],
+      [
+        3545.0,
+        6434.0,
+        950.0,
+        1939.0
+      ],
+      [
+        983.0,
+        950.0,
+        2783.0,
+        850.0
+      ],
+      [
+        1580.0,
+        1939.0,
+        850.0,
+        4369.0
+      ]
+    ],
+    "9": [
+      [
+        6509.0,
+        4202.0,
+        1073.0,
+        1234.0
+      ],
+      [
+        4202.0,
+        6966.0,
+        1092.0,
+        1672.0
+      ],
+      [
+        1073.0,
+        1092.0,
+        2739.0,
+        574.0
+      ],
+      [
+        1234.0,
+        1672.0,
+        574.0,
+        3480.0
+      ]
+    ],
+    "10": [
+      [
+        7128.0,
+        4372.0,
+        1528.0,
+        1228.0
+      ],
+      [
+        4372.0,
+        6621.0,
+        534.0,
+        1715.0
+      ],
+      [
+        1528.0,
+        534.0,
+        2532.0,
+        470.0
+      ],
+      [
+        1228.0,
+        1715.0,
+        470.0,
+        3413.0
+      ]
+    ],
+    "11": [
+      [
+        6619.0,
+        3500.0,
+        1849.0,
+        1270.0
+      ],
+      [
+        3500.0,
+        5772.0,
+        502.0,
+        1770.0
+      ],
+      [
+        1849.0,
+        502.0,
+        3307.0,
+        956.0
+      ],
+      [
+        1270.0,
+        1770.0,
+        956.0,
+        3996.0
+      ]
+    ]
+  },
+  "top_collaborations": {
+    "0": [
+      {
+        "expert_i": 0,
+        "expert_j": 3,
+        "count": 4239
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 1,
+        "count": 1616
+      },
+      {
+        "expert_i": 2,
+        "expert_j": 3,
+        "count": 1515
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 2,
+        "count": 1422
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 2,
+        "count": 557
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 3,
+        "count": 498
+      }
+    ],
+    "1": [
+      {
+        "expert_i": 0,
+        "expert_j": 1,
+        "count": 3091
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 3,
+        "count": 2115
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 2,
+        "count": 1860
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 2,
+        "count": 1245
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 3,
+        "count": 838
+      },
+      {
+        "expert_i": 2,
+        "expert_j": 3,
+        "count": 698
+      }
+    ],
+    "2": [
+      {
+        "expert_i": 0,
+        "expert_j": 1,
+        "count": 3323
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 3,
+        "count": 2834
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 3,
+        "count": 1222
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 2,
+        "count": 1200
+      },
+      {
+        "expert_i": 2,
+        "expert_j": 3,
+        "count": 755
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 2,
+        "count": 513
+      }
+    ],
+    "3": [
+      {
+        "expert_i": 0,
+        "expert_j": 1,
+        "count": 2452
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 3,
+        "count": 2299
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 3,
+        "count": 1674
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 2,
+        "count": 1235
+      },
+      {
+        "expert_i": 2,
+        "expert_j": 3,
+        "count": 1195
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 2,
+        "count": 992
+      }
+    ],
+    "4": [
+      {
+        "expert_i": 0,
+        "expert_j": 1,
+        "count": 2787
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 3,
+        "count": 2120
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 3,
+        "count": 1637
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 2,
+        "count": 1223
+      },
+      {
+        "expert_i": 2,
+        "expert_j": 3,
+        "count": 1147
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 2,
+        "count": 933
+      }
+    ],
+    "5": [
+      {
+        "expert_i": 1,
+        "expert_j": 3,
+        "count": 2587
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 1,
+        "count": 2251
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 2,
+        "count": 1732
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 3,
+        "count": 1351
+      },
+      {
+        "expert_i": 2,
+        "expert_j": 3,
+        "count": 1145
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 2,
+        "count": 781
+      }
+    ],
+    "6": [
+      {
+        "expert_i": 1,
+        "expert_j": 3,
+        "count": 2609
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 1,
+        "count": 2459
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 3,
+        "count": 1768
+      },
+      {
+        "expert_i": 2,
+        "expert_j": 3,
+        "count": 1144
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 2,
+        "count": 1013
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 2,
+        "count": 854
+      }
+    ],
+    "7": [
+      {
+        "expert_i": 0,
+        "expert_j": 1,
+        "count": 2789
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 3,
+        "count": 2481
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 3,
+        "count": 1782
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 2,
+        "count": 1151
+      },
+      {
+        "expert_i": 2,
+        "expert_j": 3,
+        "count": 917
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 2,
+        "count": 727
+      }
+    ],
+    "8": [
+      {
+        "expert_i": 0,
+        "expert_j": 1,
+        "count": 3545
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 3,
+        "count": 1939
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 3,
+        "count": 1580
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 2,
+        "count": 983
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 2,
+        "count": 950
+      },
+      {
+        "expert_i": 2,
+        "expert_j": 3,
+        "count": 850
+      }
+    ],
+    "9": [
+      {
+        "expert_i": 0,
+        "expert_j": 1,
+        "count": 4202
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 3,
+        "count": 1672
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 3,
+        "count": 1234
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 2,
+        "count": 1092
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 2,
+        "count": 1073
+      },
+      {
+        "expert_i": 2,
+        "expert_j": 3,
+        "count": 574
+      }
+    ],
+    "10": [
+      {
+        "expert_i": 0,
+        "expert_j": 1,
+        "count": 4372
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 3,
+        "count": 1715
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 2,
+        "count": 1528
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 3,
+        "count": 1228
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 2,
+        "count": 534
+      },
+      {
+        "expert_i": 2,
+        "expert_j": 3,
+        "count": 470
+      }
+    ],
+    "11": [
+      {
+        "expert_i": 0,
+        "expert_j": 1,
+        "count": 3500
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 2,
+        "count": 1849
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 3,
+        "count": 1770
+      },
+      {
+        "expert_i": 0,
+        "expert_j": 3,
+        "count": 1270
+      },
+      {
+        "expert_i": 2,
+        "expert_j": 3,
+        "count": 956
+      },
+      {
+        "expert_i": 1,
+        "expert_j": 2,
+        "count": 502
+      }
+    ]
+  }
+}

@@ -1,0 +1,78 @@
+---------------------------------------
+Begin Slurm Prolog: Apr-19-2026 23:16:26
+Job ID:    5019258
+User ID:   jchen3392
+Account:   cse
+Job name:  moe_domain_gen
+Partition: ice-gpu
+QOS:       coc-ice
+---------------------------------------
+==========================================
+Domain Generalization Experiment
+==========================================
+Job ID: 5019258
+Node: atl1-1-03-013-13-0
+Started: Sun Apr 19 11:16:26 PM EDT 2026
+
+Running contribution metrics across domains...
+================================================================================
+Domain Generalization: Expert Contribution Metrics
+================================================================================
+Model: Isotonic/TinyMixtral-4x248M-MoE
+Domains: ['wikitext2', 'code', 'math', 'scientific']
+Samples per domain: 128
+C_i threshold: 0.1
+Device: cuda
+
+Loading model...
+Model: 12 layers, 4 experts per layer
+  Routing sinks (C_i < 0.1): 12 experts
+  Routing sinks (C_i < 0.1): 12 experts
+  Routing sinks (C_i < 0.1): 12 experts
+  Routing sinks (C_i < 0.1): 12 experts
+
+================================================================================
+CROSS-DOMAIN COMPARISON: Expert 2 Routing Sink Analysis
+================================================================================
+
+Domain          Avg C_i    Min C_i    Max C_i    Sink Layers  Is Sink?  
+--------------------------------------------------------------------------------
+wikitext2       0.0317     0.0044     0.0739     12/12         YES       
+code            0.0202     0.0041     0.0261     12/12         YES       
+math            0.0255     0.0059     0.0349     12/12         YES       
+scientific      0.0209     0.0044     0.0288     12/12         YES       
+--------------------------------------------------------------------------------
+
+Expert 2 is a routing sink in 4/4 domains
+CONCLUSION: Expert 2 is UNIVERSALLY a routing sink (C_i threshold generalizes)
+
+================================================================================
+ALL EXPERTS: Average C_i by Domain
+================================================================================
+
+Expert    wikitext2      code           math           scientific     
+----------------------------------------------------------------------
+Expert 0   0.7949         0.5312         0.6536         0.7002         
+Expert 1   0.7930         0.7476         0.6733         0.5956         
+Expert 2   0.0317        *0.0202        *0.0255        *0.0209        *
+Expert 3   0.8036         0.5114         0.6139         0.5476         
+----------------------------------------------------------------------
+* = Below threshold (routing sink candidate)
+
+Results saved to: experiments/pruning/domain_generalization/domain_generalization_results.json
+
+==========================================
+Completed: Sun Apr 19 11:26:59 PM EDT 2026
+==========================================
+---------------------------------------
+Begin Slurm Epilog: Apr-19-2026 23:26:59
+Job ID:        5019258
+User ID:       jchen3392
+Account:       cse
+Job name:      moe_domain_gen
+Resources:     cpu=8,gres/gpu:h100=1,mem=64G,node=1
+Rsrc Used:     cput=01:24:32,vmem=0,walltime=00:10:34,mem=4271516K,energy_used=0
+Partition:     ice-gpu
+QOS:           coc-ice
+Nodes:         atl1-1-03-013-13-0
+---------------------------------------

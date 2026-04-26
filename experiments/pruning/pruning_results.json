@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-04-02T17:24:36.132875",
+  "model": "Isotonic/TinyMixtral-4x248M-MoE",
+  "baseline_perplexity": 800.3794960008256,
+  "num_layers": 12,
+  "num_experts": 4,
+  "pruning": {
+    "experts_pruned": [
+      [
+        0,
+        1
+      ]
+    ],
+    "num_pruned": 1,
+    "pruned_perplexity": 890.1515814503613,
+    "ppl_increase": 89.77208544953567,
+    "ppl_increase_percent": 11.216190057102995
+  }
+}

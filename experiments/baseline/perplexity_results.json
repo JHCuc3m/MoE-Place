@@ -1,0 +1,12 @@
+{
+  "perplexity": 800.3794960008256,
+  "loss": 6.68508598519108,
+  "total_tokens": 663040,
+  "num_batches": 324,
+  "dataset": "wikitext2",
+  "split": "test",
+  "num_texts": 2891,
+  "num_windows": 1295,
+  "max_length": 512,
+  "stride": 256
+}
