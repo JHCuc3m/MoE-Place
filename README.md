@@ -1,76 +1,91 @@
-- submodule update
+# MoE-Place
+
+Code for **"Co-Activation Aware Expert Pruning for Mixture-of-Experts Models"**.
+
+## Setup
 
 ```bash
-git submodule update --remote --merge docs/MoE-Place-Overleaf
-```
-
-- Get partitions on Slurm
-```bash
-sinfo -o "%P %G %D %T"
-```
-
-- Request H100 on Ice
-```bash
-srun --partition=ice-gpu --account=cse --qos=coc-ice --gres=gpu:h100:1 --ntasks=1 --cpus-per-task=8 --mem=64G --pty bash -i
-```
-
-- Check allocated GPU
-```bash
-nvidia-smi
-```
-
-- Set up environment on H100 node: 
-```bash
-bash scripts/setup_env.sh
+# On PACE cluster
 module load anaconda3/2023.03
+bash scripts/setup_env.sh
 conda activate moe-place
 ```
 
-- Get Baseline
-```bash
-# Quick test (64 calibration samples, 50 eval batches, ~2-3 min)
-python scripts/benchmark_baseline.py --quick
+Or manually: `pip install -e .`
 
-# Full baseline (128 calibration, full WikiText-2 test eval)
-python scripts/benchmark_baseline.py
+**Hardware:** NVIDIA H100 80GB, CUDA 12.4
 
-#Custom settings
-python scripts/benchmark_baseline.py --calibration_samples 256 --eval_batch_size 8
-```
+---
 
-- Run Metrics Computation
-```bash
-python scripts/compute_pruning_metrics.py
-```
+## Reproducing Experiments
 
-- Visualize
+### 1. Baseline perplexity
 
 ```bash
-# Visualize all layers with pruning annotations
-python scripts/visualize_coactivation.py --annotate
-
-# Visualize only Layer 0
-python scripts/visualize_coactivation.py --layer 0 --annotate
-
-# Show plots interactively (instead of just saving)
-python scripts/visualize_coactivation.py --layer 0 --annotate --show
+python scripts/analysis/benchmark_baseline.py          # full
+python scripts/analysis/benchmark_baseline.py --quick  # fast check
 ```
 
-- Prune
+### 2. Structural metrics & ablation study
 
 ```bash
-# Prune top-N experts globally (based on structural score ranking)
-python scripts/evaluate_pruning.py --num_prune 1
+# Compute co-activation-based metrics (utilization, redundancy, centrality)
+python scripts/analysis/compute_pruning_metrics.py
 
-# Prune 1 expert per layer
-python scripts/evaluate_pruning.py --prune_per_layer 1
-
-# Prune specific experts (layer:expert format)
-python scripts/evaluate_pruning.py --prune_experts "0:1,5:2"
-
-# Run full sensitivity analysis (disable each expert one at a time)
-python scripts/evaluate_pruning.py --sensitivity
-
-# Quick test (50 eval batches)
-python scripts/evaluate_pruning.py --num_prune 1 --quick
+# Ablation: compare each metric against sensitivity ground truth
+python scripts/analysis/ablation_structural_metrics.py \
+    --stats_path experiments/baseline/coactivation_stats.json \
+    --sensitivity_path experiments/pruning/sensitivity_results.json \
+    --output_dir experiments/pruning/ablation
 ```
+
+### 3. Sensitivity analysis (ground truth)
+
+```bash
+# Full sensitivity analysis — disables each of the 48 experts one at a time
+python scripts/analysis/evaluate_pruning.py --sensitivity
+
+# Global Expert 2 pruning (all 12 layers simultaneously)
+python scripts/analysis/evaluate_pruning.py --prune_experts "0:2,1:2,2:2,3:2,4:2,5:2,6:2,7:2,8:2,9:2,10:2,11:2"
+```
+
+### 4. Contribution metrics (C_i, S_i)
+
+```bash
+python scripts/analysis/compute_contribution_metrics.py                   # full
+python scripts/analysis/compute_contribution_metrics.py --quick           # fast check
+python scripts/analysis/compute_contribution_metrics.py --compare_sensitivity  # validate vs ground truth
+```
+
+### 5. Domain generalization
+
+```bash
+# C_i across WikiText-2, code, math, and scientific text
+python scripts/analysis/benchmark_contribution_domains.py
+
+# Pruning impact across domains (baseline vs Expert 2 pruned)
+python scripts/analysis/eval_pruned_cross_domain.py
+```
+
+---
+
+## SLURM Jobs
+
+For the heavier experiments on the PACE cluster:
+
+```bash
+sbatch scripts/jobs/submit_contribution.sh          # contribution metrics
+sbatch scripts/jobs/submit_cross_domain_pruning.sh  # cross-domain pruning impact
+sbatch scripts/jobs/submit_domain_sensitivity.sh    # full domain sensitivity
+sbatch scripts/jobs/submit_ablation.sh              # structural metrics ablation
+```
+
+All jobs use `--partition=gpu-h100 --account=gts-ur2`.
+
+---
+
+## Results
+
+Experiments output to `experiments/`:
+- `baseline/` — co-activation stats, perplexity
+- `pruning/` — sensitivity results, contribution metrics, ablation, domain generalization

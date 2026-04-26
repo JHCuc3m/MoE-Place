@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "torch>=2.2.0",
-    "transformers>=4.40.0",
+    "transformers>=4.40.0,<4.46.0",
     "accelerate>=0.27.0",
     "triton>=2.2.0",
     "einops>=0.7.0",
@@ -18,7 +18,7 @@ dependencies = [
     "pyyaml>=6.0",
     "datasets>=2.16.0",
     "networkx>=3.0",
-    "spicy",
+    "scipy",
 ]
 
 [project.optional-dependencies]

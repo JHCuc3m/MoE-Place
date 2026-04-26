@@ -1,5 +1,7 @@
 # Experiment outputs
-experiments/
+experiments/logs
+experiments/deepseek/
+
 
 # Python build artifacts
 *.egg-info/
@@ -20,16 +22,9 @@ dist/
 
 #Claude
 .claude
-CLAUDE.md 
-PLAN.md
-MODEL.md
-FINDING.md
 
 #Debug
-scripts/debug_*
-
-#Docs
-docs/new_direction_*
+scripts/debug/
 
 #Jobs
-scripts/jobs/
+scripts/utils/
