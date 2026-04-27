@@ -39,7 +39,7 @@ python scripts/analysis/ablation_structural_metrics.py \
     --output_dir experiments/pruning/ablation
 ```
 
-### 3. Sensitivity analysis (ground truth)
+### 3. Sensitivity analysis (ablation per expert, ground truth)
 
 ```bash
 # Full sensitivity analysis — disables each of the 48 experts one at a time
