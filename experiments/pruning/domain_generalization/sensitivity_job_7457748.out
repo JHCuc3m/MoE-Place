@@ -1,0 +1,167 @@
+---------------------------------------
+Begin Slurm Prolog: Apr-27-2026 01:16:00
+Job ID:    7457748
+User ID:   jchen3392
+Account:   gts-ur2
+Job name:  moe-domain-sens
+Partition: gpu-h100
+QOS:       inferno
+---------------------------------------
+==========================================
+Cross-Domain Sensitivity Analysis
+==========================================
+Job ID: 7457748
+Node: atl1-1-01-006-24-0
+Started: Mon Apr 27 01:16:02 AM EDT 2026
+
+================================================================================
+Cross-Domain Sensitivity & Contribution Analysis
+================================================================================
+Model: Isotonic/TinyMixtral-4x248M-MoE
+Domains: ['wikitext2', 'code', 'math', 'scientific']
+Samples per domain: 128
+C_i threshold: 0.1
+Run sensitivity: True
+Device: cuda
+
+Loading model...
+Model: 12 layers, 4 experts per layer
+
+######################################################################
+# Processing: wikitext2
+######################################################################
+
+======================================================================
+Domain: WIKITEXT2
+======================================================================
+
+Baseline Perplexity: 1159.72
+
+C_i vs Sensitivity Correlation:
+  Spearman ρ: 0.4285
+  p-value: 0.0024
+
+Ranking Agreement:
+  Top-1: 100.0% (12/12)
+  Expert 2 lowest C_i: 12/12 layers
+  Expert 2 lowest sensitivity: 12/12 layers
+
+Expert 2 Analysis:
+  Avg C_i: 0.0200 (others: 0.4747)
+  C_i ratio (others/expert2): 23.8x
+  Avg sensitivity: -207.04
+  Is routing sink (C_i < 0.1): YES
+  Is harmful (sens < 0): YES
+
+######################################################################
+# Processing: code
+######################################################################
+
+======================================================================
+Domain: CODE
+======================================================================
+
+Baseline Perplexity: 750.33
+
+C_i vs Sensitivity Correlation:
+  Spearman ρ: 0.6771
+  p-value: 0.0000
+
+Ranking Agreement:
+  Top-1: 66.7% (8/12)
+  Expert 2 lowest C_i: 12/12 layers
+  Expert 2 lowest sensitivity: 8/12 layers
+
+Expert 2 Analysis:
+  Avg C_i: 0.0119 (others: 0.3572)
+  C_i ratio (others/expert2): 30.0x
+  Avg sensitivity: -39.53
+  Is routing sink (C_i < 0.1): YES
+  Is harmful (sens < 0): YES
+
+######################################################################
+# Processing: math
+######################################################################
+
+======================================================================
+Domain: MATH
+======================================================================
+
+Baseline Perplexity: 246.39
+
+C_i vs Sensitivity Correlation:
+  Spearman ρ: 0.6178
+  p-value: 0.0000
+
+Ranking Agreement:
+  Top-1: 100.0% (12/12)
+  Expert 2 lowest C_i: 12/12 layers
+  Expert 2 lowest sensitivity: 12/12 layers
+
+Expert 2 Analysis:
+  Avg C_i: 0.0148 (others: 0.3738)
+  C_i ratio (others/expert2): 25.3x
+  Avg sensitivity: -19.70
+  Is routing sink (C_i < 0.1): YES
+  Is harmful (sens < 0): YES
+
+######################################################################
+# Processing: scientific
+######################################################################
+
+======================================================================
+Domain: SCIENTIFIC
+======================================================================
+
+Baseline Perplexity: 461.95
+
+C_i vs Sensitivity Correlation:
+  Spearman ρ: 0.7571
+  p-value: 0.0000
+
+Ranking Agreement:
+  Top-1: 91.7% (11/12)
+  Expert 2 lowest C_i: 12/12 layers
+  Expert 2 lowest sensitivity: 11/12 layers
+
+Expert 2 Analysis:
+  Avg C_i: 0.0120 (others: 0.3592)
+  C_i ratio (others/expert2): 29.9x
+  Avg sensitivity: -26.94
+  Is routing sink (C_i < 0.1): YES
+  Is harmful (sens < 0): YES
+
+================================================================================
+CROSS-DOMAIN SUMMARY
+================================================================================
+
+Domain       Baseline PPL   E2 Avg C_i   E2 Avg Sens  Routing Sink?  Harmful?   Top-1 Agree 
+------------------------------------------------------------------------------------------
+wikitext2    1159.72        0.0200       -207.04      YES            YES        100%        
+code         750.33         0.0119       -39.53       YES            YES        67%         
+math         246.39         0.0148       -19.70       YES            YES        100%        
+scientific   461.95         0.0120       -26.94       YES            YES        92%         
+------------------------------------------------------------------------------------------
+
+Expert 2 is a routing sink in 4/4 domains
+Expert 2 is harmful in 4/4 domains
+
+✓ CONCLUSION: C_i threshold GENERALIZES - Expert 2 is universally a routing sink
+
+Results saved to: experiments/pruning/domain_generalization/domain_sensitivity_results.json
+
+==========================================
+Completed: Mon Apr 27 01:39:29 AM EDT 2026
+==========================================
+---------------------------------------
+Begin Slurm Epilog: Apr-27-2026 01:39:29
+Job ID:        7457748
+User ID:       jchen3392
+Account:       gts-ur2
+Job name:      moe-domain-sens
+Resources:     cpu=8,gres/gpu:h100=1,mem=64G,node=1
+Rsrc Used:     cput=03:08:00,vmem=0,walltime=00:23:30,mem=5205004K,energy_used=0
+Partition:     gpu-h100
+QOS:           inferno
+Nodes:         atl1-1-01-006-24-0
+---------------------------------------

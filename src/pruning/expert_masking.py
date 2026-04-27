@@ -296,40 +296,37 @@ class MixtralExpertMasker(ExpertMasker):
 
             disabled = self.disabled_experts[layer_idx]
 
-            if isinstance(output, tuple) and len(output) >= 3:
-                # MixtralTopKRouter format: (probs, weights, indices)
+            if isinstance(output, torch.Tensor):
+                # nn.Linear gate output: raw logits [batch*seq, num_experts]
+                # Set disabled expert logits to -inf so they are excluded from top-k
+                new_logits = output.clone()
+                for expert_idx in disabled:
+                    new_logits[:, expert_idx] = float('-inf')
+                logger.debug(f"Layer {layer_idx}: Set logits to -inf for experts {disabled}")
+                return new_logits
+
+            elif isinstance(output, tuple) and len(output) >= 3:
+                # Router format: (probs, weights, indices)
                 probs, weights, indices = output[0], output[1], output[2]
-
-                # Clone weights to modify
                 new_weights = weights.clone()
-
-                # Zero out weights where indices match disabled experts
                 for expert_idx in disabled:
                     mask = (indices == expert_idx)
                     new_weights[mask] = 0.0
-
-                # Renormalize weights so they sum to 1
                 weight_sum = new_weights.sum(dim=-1, keepdim=True)
-                weight_sum = torch.clamp(weight_sum, min=1e-8)  # Avoid division by zero
+                weight_sum = torch.clamp(weight_sum, min=1e-8)
                 new_weights = new_weights / weight_sum
-
-                logger.debug(f"Layer {layer_idx}: Zeroed weights for experts {disabled}")
-
                 return (probs, new_weights, indices) + output[3:] if len(output) > 3 else (probs, new_weights, indices)
 
             elif isinstance(output, tuple) and len(output) == 2:
                 # Fallback: (weights, indices) format
                 weights, indices = output[0], output[1]
                 new_weights = weights.clone()
-
                 for expert_idx in disabled:
                     mask = (indices == expert_idx)
                     new_weights[mask] = 0.0
-
                 weight_sum = new_weights.sum(dim=-1, keepdim=True)
                 weight_sum = torch.clamp(weight_sum, min=1e-8)
                 new_weights = new_weights / weight_sum
-
                 return (new_weights, indices)
 
             else:

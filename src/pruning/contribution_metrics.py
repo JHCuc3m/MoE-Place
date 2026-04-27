@@ -311,20 +311,22 @@ class ExpertContributionCollector:
                 experts = moe_module.experts
 
                 if isinstance(experts, nn.ModuleList):
-                    # DeepSeek style: ModuleList of individual expert modules
                     expert = experts[expert_idx]
-                    # Each expert has gate_proj, up_proj, down_proj
-                    gate = F.linear(inputs, expert.gate_proj.weight)
-                    up = F.linear(inputs, expert.up_proj.weight)
-                    # Get activation function
-                    act_fn = getattr(expert, 'act_fn', None) or F.silu
-                    if callable(act_fn):
-                        hidden = act_fn(gate) * up
+                    if hasattr(expert, 'w1'):
+                        # Mixtral style: w1 (gate+SiLU), w2 (down), w3 (up)
+                        hidden = F.silu(expert.w1(inputs)) * expert.w3(inputs)
+                        E_i = expert.w2(hidden)
+                    elif hasattr(expert, 'gate_proj'):
+                        # DeepSeek style: gate_proj, up_proj, down_proj
+                        gate = F.linear(inputs, expert.gate_proj.weight)
+                        up = F.linear(inputs, expert.up_proj.weight)
+                        act_fn = getattr(expert, 'act_fn', None) or F.silu
+                        hidden = act_fn(gate) * up if callable(act_fn) else F.silu(gate) * up
+                        E_i = F.linear(hidden, expert.down_proj.weight)
                     else:
-                        hidden = F.silu(gate) * up
-                    E_i = F.linear(hidden, expert.down_proj.weight)
+                        raise ValueError(f"Unknown expert module attributes: {list(expert._modules.keys())}")
                 elif hasattr(experts, 'gate_up_proj'):
-                    # Mixtral style: Fused tensors
+                    # Fused tensor style
                     gate_up = F.linear(inputs, experts.gate_up_proj[expert_idx])
                     gate, up = gate_up.chunk(2, dim=-1)
                     act_fn = getattr(experts, 'act_fn', F.silu)
